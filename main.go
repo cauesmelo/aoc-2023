@@ -7,7 +7,7 @@ import (
 	"github.com/cauesmelo/aoc-2023/solutions"
 )
 
-const LAST_DAY = 2
+const LAST_DAY = 3
 
 func main() {
 	day := flag.Int("d", 0, "Number of the day to run")
@@ -27,5 +27,9 @@ func main() {
 	case 2:
 		fmt.Println("== Day 2 ==")
 		fmt.Printf("Part 1 -> %d \nPart 2- > %d\n", solutions.Day2_part1(), solutions.Day2_part2())
+
+	case 3:
+		fmt.Println("== Day 3 ==")
+		fmt.Printf("Part 1 -> %d \nPart 2- > %d\n", solutions.Day3_part1(), solutions.Day3_part2())
 	}
 }

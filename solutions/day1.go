@@ -1,29 +1,16 @@
-package main
+package solutions
 
 import (
 	"fmt"
-	"os"
 	"strconv"
-	"strings"
 	"sync"
+
+	"github.com/cauesmelo/aoc-2023/util"
 )
 
 type lineData struct {
 	Num int
 	Pos int
-}
-
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
-func readLines() []string {
-	dat, err := os.ReadFile("./input.txt")
-	check(err)
-
-	return strings.Split(string(dat), "\n")
 }
 
 func parseSpelled(slice string) int {
@@ -79,7 +66,48 @@ func isNumber(r rune) bool {
 	return false
 }
 
-func calcLine(line []lineData) int {
+func calcLine_1(line string) int {
+	first := -1
+	last := -1
+
+	for _, char := range line {
+		if isNumber(char) {
+			n, err := strconv.Atoi(string(char))
+			util.Check(err)
+
+			last = n
+
+			if first == -1 {
+				first = n
+			}
+		}
+	}
+
+	if last == -1 {
+		last = first
+	}
+
+	str := fmt.Sprintf("%d%d", first, last)
+
+	finalN, err := strconv.Atoi(str)
+	util.Check(err)
+
+	return finalN
+}
+
+func Day1_part1() int {
+	lines := util.GetInput(1, false)
+
+	total := 0
+
+	for _, line := range lines {
+		total = total + calcLine_1(line)
+	}
+
+	return total
+}
+
+func calcLine_2(line []lineData) int {
 	first := -1
 	last := -1
 
@@ -94,9 +122,9 @@ func calcLine(line []lineData) int {
 	return finalN
 }
 
-func main() {
+func Day1_part2() int {
 
-	lines := readLines()
+	lines := util.GetInput(1, false)
 
 	parsedLines := make(chan []lineData, len(lines))
 	var wg sync.WaitGroup
@@ -119,8 +147,8 @@ func main() {
 	total := 0
 
 	for line := range parsedLines {
-		total = total + calcLine(line)
+		total = total + calcLine_2(line)
 	}
 
-	fmt.Println(total)
+	return total
 }

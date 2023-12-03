@@ -31,30 +31,9 @@ func getNumber(s string) int {
 	return num
 }
 
-func validateRounds(rounds []round) bool {
-	for _, round := range rounds {
-		if round.red > 12 {
-			return false
-		}
-
-		if round.green > 13 {
-			return false
-		}
-
-		if round.blue > 14 {
-			return false
-		}
-	}
-
-	return true
-}
-
-func isValid(line string) (int, bool) {
+func isValid(line string) int {
 	lineParts := strings.Split(line, ":")
-	gameIdentifier := lineParts[0]
 	gameSetsStr := lineParts[1]
-
-	ID := getNumber(gameIdentifier)
 
 	gameSets := strings.Split(gameSetsStr, ";")
 
@@ -80,7 +59,25 @@ func isValid(line string) (int, bool) {
 		rounds = append(rounds, s)
 	}
 
-	return ID, validateRounds(rounds)
+	fewestN := round{}
+
+	for _, round := range rounds {
+		if fewestN.red < round.red {
+			fewestN.red = round.red
+		}
+
+		if fewestN.green < round.green {
+			fewestN.green = round.green
+		}
+
+		if fewestN.blue < round.blue {
+			fewestN.blue = round.blue
+		}
+	}
+
+	sum := fewestN.red * fewestN.green * fewestN.blue
+
+	return sum
 }
 
 func main() {
@@ -92,11 +89,9 @@ func main() {
 	total := 0
 
 	for _, line := range lines {
-		ID, valid := isValid(line)
+		sum := isValid(line)
 
-		if valid {
-			total = total + ID
-		}
+		total = total + sum
 	}
 
 	fmt.Println(total)

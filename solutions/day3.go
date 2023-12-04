@@ -9,12 +9,6 @@ import (
 	"github.com/cauesmelo/aoc-2023/util"
 )
 
-type lineSet struct {
-	prev string
-	cur  string
-	next string
-}
-
 type number struct {
 	line       int
 	value      int
@@ -92,24 +86,34 @@ func findAdj(numbers []number, symbolPos []int) []int {
 	return adj
 }
 
-func matchCurrLine(numbers []number, symbols []int) {
+func matchCurrLine(numbers []number, symbols []int) []int {
+	values := make([]int, 0)
+
 	for _, symbolPos := range symbols {
 		for i, num := range numbers {
 			if num.end == symbolPos-1 || num.start == symbolPos+1 {
 				numbers[i].partNumber = true
+				values = append(values, num.value)
 			}
 		}
 	}
+
+	return values
 }
 
-func matchAdjLine(numbers []number, symbols []int) {
+func matchAdjLine(numbers []number, symbols []int) []int {
+	values := make([]int, 0)
+
 	for _, symbolPos := range symbols {
 		for i, num := range numbers {
 			if symbolPos >= num.start-1 && symbolPos <= num.end+1 {
 				numbers[i].partNumber = true
+				values = append(values, num.value)
 			}
 		}
 	}
+
+	return values
 }
 
 func sumPartNumbers(numbers [][]number) int {
@@ -146,6 +150,63 @@ func Day3_part1() int {
 	return sumPartNumbers(numbers)
 }
 
+func filterPossibleGears(linesStr []string, symbols [][]int) [][]int {
+	gears := make([][]int, len(linesStr))
+
+	for i := range symbols {
+		for _, j := range symbols[i] {
+
+			if linesStr[i][j] == '*' {
+				gears[i] = append(gears[i], j)
+			}
+		}
+	}
+
+	return gears
+}
+
+func calcGears(prev []number, curr []number, next []number, gears []int) int {
+	sum := 0
+
+	for _, gear := range gears {
+		fmt.Println("Cur gear pos: ", gear)
+		parts := matchCurrLine(curr, []int{gear})
+		parts = append(parts, matchAdjLine(prev, []int{gear})...)
+		parts = append(parts, matchAdjLine(next, []int{gear})...)
+
+		if len(parts) != 2 {
+			continue
+		}
+
+		sum = sum + parts[0]*parts[1]
+	}
+
+	return sum
+}
+
 func Day3_part2() int {
-	return 0
+	linesStr := util.GetInput(3, false)
+
+	numbers, symbols := scanLines(linesStr)
+	gears := filterPossibleGears(linesStr, symbols)
+
+	total := 0
+
+	for i := range gears {
+		var prev []number
+		curr := numbers[i]
+		var next []number
+
+		if i != 0 {
+			prev = numbers[i-1]
+		}
+
+		if i != len(linesStr)-1 {
+			next = numbers[i+1]
+		}
+
+		total = total + calcGears(prev, curr, next, gears[i])
+	}
+
+	return total
 }

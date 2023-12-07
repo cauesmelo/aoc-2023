@@ -1,12 +1,40 @@
 package solutions
 
 import (
+	"fmt"
+	"strconv"
+
 	"github.com/cauesmelo/aoc-2023/util"
 )
 
 type race struct {
 	time int
 	dist int
+}
+
+func getRace(lines []string) race {
+	races := getRaces(lines)
+
+	time := ""
+	dist := ""
+
+	for _, race := range races {
+		time = fmt.Sprintf("%s%d", time, race.time)
+		dist = fmt.Sprintf("%s%d", dist, race.dist)
+	}
+
+	timeInt, err := strconv.Atoi(time)
+	util.Check(err)
+
+	distInt, err := strconv.Atoi(dist)
+	util.Check(err)
+
+	finalRace := race{
+		time: timeInt,
+		dist: distInt,
+	}
+
+	return finalRace
 }
 
 func getRaces(lines []string) []race {
@@ -66,7 +94,9 @@ func Day6_part1() int {
 }
 
 func Day6_part2() int {
-	// _ := util.GetInput(6, true)
+	lines := util.GetInput(6, false)
 
-	return 0
+	race := getRace(lines)
+
+	return getWaysToBeat(race)
 }

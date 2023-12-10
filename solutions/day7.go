@@ -36,6 +36,22 @@ var cardValue = map[rune]int{
 	'2': 1,
 }
 
+var cardValue2 = map[rune]int{
+	'A': 13,
+	'K': 12,
+	'Q': 11,
+	'T': 10,
+	'9': 9,
+	'8': 8,
+	'7': 7,
+	'6': 6,
+	'5': 5,
+	'4': 4,
+	'3': 3,
+	'2': 2,
+	'J': 1,
+}
+
 type bet struct {
 	cards    string
 	bet      int
@@ -65,7 +81,7 @@ func parseBets(lines []string) []bet {
 	return bets
 }
 
-func getHandPairs(bets []bet) []bet {
+func getHandPairs(bets []bet, joker bool) []bet {
 	type pos struct {
 		char rune
 		occ  int
@@ -94,6 +110,27 @@ func getHandPairs(bets []bet) []bet {
 		sort.Slice(arr[:], func(i, j int) bool {
 			return arr[i].occ > arr[j].occ
 		})
+
+		if joker {
+			jokers := 0
+
+			for x := range arr {
+				if arr[x].char == 'J' {
+					jokers = arr[x].occ
+					arr[x].occ = 0
+				}
+			}
+
+			if arr[0].char != 'J' {
+				arr[0].occ = arr[0].occ + jokers
+			} else {
+				arr[1].occ = arr[1].occ + jokers
+			}
+
+			sort.Slice(arr[:], func(i, j int) bool {
+				return arr[i].occ > arr[j].occ
+			})
+		}
 
 		if arr[4].occ == 1 {
 			bets[idx].handType = HighCard
@@ -131,25 +168,30 @@ func getHandPairs(bets []bet) []bet {
 	return bets
 }
 
-func compareCards(a string, b string) bool {
+func compareCards(a string, b string, v2 bool) bool {
 	for i := range a {
 		if a[i] == b[i] {
 			continue
 		}
 
+		if v2 {
+			return cardValue2[rune(a[i])] > cardValue2[rune(b[i])]
+		}
+
 		return cardValue[rune(a[i])] > cardValue[rune(b[i])]
+
 	}
 
 	return false
 }
 
-func getRanks(bets []bet) []bet {
+func getRanks(bets []bet, v2 bool) []bet {
 	sort.Slice(bets, func(i, j int) bool {
 		if bets[i].handType != bets[j].handType {
 			return bets[i].handType > bets[j].handType
 		}
 
-		return compareCards(bets[i].cards, bets[j].cards)
+		return compareCards(bets[i].cards, bets[j].cards, v2)
 	})
 
 	rank := len(bets)
@@ -176,13 +218,18 @@ func Day7_part1() int {
 	lines := util.GetInput(7, false)
 
 	bets := parseBets(lines)
-	bets = getHandPairs(bets)
-	bets = getRanks(bets)
+	bets = getHandPairs(bets, false)
+	bets = getRanks(bets, false)
 
 	return getTotal(bets)
 }
 
 func Day7_part2() int {
-	// lines := util.GetInput(6, false)
-	return 0
+	lines := util.GetInput(7, false)
+
+	bets := parseBets(lines)
+	bets = getHandPairs(bets, true)
+	bets = getRanks(bets, true)
+
+	return getTotal(bets)
 }

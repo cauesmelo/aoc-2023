@@ -10,7 +10,7 @@ func getSequences(lines []string) [][]int {
 	ns := make([][]int, 0)
 
 	for _, line := range lines {
-		ns = append(ns, getNumbers(line))
+		ns = append(ns, util.GetNumbers(line))
 	}
 
 	return ns

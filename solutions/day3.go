@@ -67,25 +67,6 @@ func scanLines(linesStr []string) ([][]number, [][]int) {
 	return numbers, symbols
 }
 
-func findAdj(numbers []number, symbolPos []int) []int {
-	adj := make([]int, 0)
-
-	fmt.Println("Numbers: ", numbers)
-	fmt.Println("Symbols: ", symbolPos)
-
-	for _, symbol := range symbolPos {
-		for _, n := range numbers {
-			if symbol >= n.start && symbol <= n.end {
-				adj = append(adj, n.value)
-			}
-		}
-	}
-
-	fmt.Println("Adj: ", adj)
-
-	return adj
-}
-
 func matchCurrLine(numbers []number, symbols []int) []int {
 	values := make([]int, 0)
 

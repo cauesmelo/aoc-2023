@@ -38,8 +38,8 @@ func getRace(lines []string) race {
 }
 
 func getRaces(lines []string) []race {
-	times := getNumbers(lines[0])
-	dists := getNumbers(lines[1])
+	times := util.GetNumbers(lines[0])
+	dists := util.GetNumbers(lines[1])
 
 	races := make([]race, 0)
 

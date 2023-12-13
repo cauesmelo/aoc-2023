@@ -21,11 +21,11 @@ type seq struct {
 type set = []seq
 
 func scanSeeds(line string) []int {
-	return getNumbers(line)
+	return util.GetNumbers(line)
 }
 
 func scanSeedsv2(line string) []rangeSeed {
-	numbers := getNumbers(line)
+	numbers := util.GetNumbers(line)
 	seeds := make([]rangeSeed, 0)
 
 	i := 0
@@ -43,7 +43,7 @@ func scanSeedsv2(line string) []rangeSeed {
 }
 
 func scanSeq(line string) seq {
-	numbers := getNumbers(line)
+	numbers := util.GetNumbers(line)
 
 	source := numbers[1]
 	dest := numbers[0]

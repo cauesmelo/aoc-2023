@@ -16,7 +16,7 @@ type card struct {
 }
 
 func getNumbers(line string) []int {
-	re := regexp.MustCompile(`\d+`)
+	re := regexp.MustCompile(`-?\d+`)
 
 	f := re.FindAllStringIndex(line, -1)
 

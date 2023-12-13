@@ -1,6 +1,8 @@
 package solutions
 
 import (
+	"slices"
+
 	"github.com/cauesmelo/aoc-2023/util"
 )
 
@@ -37,11 +39,13 @@ func extrapolate(seq []int) int {
 	for i := 1; i < len(seq); i++ {
 		curr = seq[i]
 
-		diff = append(diff, curr-prev)
+		diff = append(diff, prev-curr)
 		prev = seq[i]
 	}
 
-	return curr + extrapolate(diff)
+	res := curr - extrapolate(diff)
+
+	return res
 }
 
 func Day9_part1() int {
@@ -58,7 +62,15 @@ func Day9_part1() int {
 }
 
 func Day9_part2() int {
-	_ = util.GetInput(9, true)
+	lines := util.GetInput(9, false)
 
-	return 0
+	seqs := getSequences(lines)
+
+	sum := 0
+	for _, seq := range seqs {
+		slices.Reverse(seq)
+		sum += extrapolate(seq)
+	}
+
+	return sum
 }

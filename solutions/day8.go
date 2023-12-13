@@ -124,7 +124,7 @@ func moveUntilZZZSim(moves string, m map[string]node) int {
 	return LCM(steps[0], steps[1], steps[2:])
 }
 
-func Day8_part1() int {
+func (AOC) Day8_part1() int {
 	lines := util.GetInput(8, false)
 	tree := parseTree(lines[2:])
 	moves := moveUntilZZZ(lines[0], tree)
@@ -132,7 +132,7 @@ func Day8_part1() int {
 	return moves
 }
 
-func Day8_part2() int {
+func (AOC) Day8_part2() int {
 	lines := util.GetInput(8, false)
 
 	tree := parseTree(lines[2:])

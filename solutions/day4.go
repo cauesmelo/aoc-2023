@@ -60,7 +60,7 @@ func procLine(line string) int {
 	return int(math.Pow(2, float64(len(match)-1)))
 }
 
-func Day4_part1() int {
+func (AOC) Day4_part1() int {
 	lines := util.GetInput(4, false)
 
 	sum := 0
@@ -115,7 +115,7 @@ func procCopy(cards []card, i int) []card {
 	return cards
 }
 
-func Day4_part2() int {
+func (AOC) Day4_part2() int {
 	lines := util.GetInput(4, false)
 
 	cards := make([]card, 0)

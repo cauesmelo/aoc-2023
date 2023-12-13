@@ -130,7 +130,7 @@ func sumPartNumbers(numbers [][]number) int {
 	return sum
 }
 
-func Day3_part1() int {
+func (AOC) Day3_part1() int {
 	linesStr := util.GetInput(3, false)
 
 	numbers, symbols := scanLines(linesStr)
@@ -184,7 +184,7 @@ func calcGears(prev []number, curr []number, next []number, gears []int) int {
 	return sum
 }
 
-func Day3_part2() int {
+func (AOC) Day3_part2() int {
 	linesStr := util.GetInput(3, false)
 
 	numbers, symbols := scanLines(linesStr)

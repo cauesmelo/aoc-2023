@@ -95,7 +95,7 @@ func calcLine_1(line string) int {
 	return finalN
 }
 
-func Day1_part1() int {
+func (AOC) Day1_part1() int {
 	lines := util.GetInput(1, false)
 
 	total := 0
@@ -122,7 +122,7 @@ func calcLine_2(line []lineData) int {
 	return finalN
 }
 
-func Day1_part2() int {
+func (AOC) Day1_part2() int {
 
 	lines := util.GetInput(1, false)
 

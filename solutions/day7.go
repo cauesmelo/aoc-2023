@@ -214,7 +214,7 @@ func getTotal(bets []bet) int {
 	return sum
 }
 
-func Day7_part1() int {
+func (AOC) Day7_part1() int {
 	lines := util.GetInput(7, false)
 
 	bets := parseBets(lines)
@@ -224,7 +224,7 @@ func Day7_part1() int {
 	return getTotal(bets)
 }
 
-func Day7_part2() int {
+func (AOC) Day7_part2() int {
 	lines := util.GetInput(7, false)
 
 	bets := parseBets(lines)

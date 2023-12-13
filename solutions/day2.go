@@ -83,7 +83,7 @@ func isValid_part1(line string) (int, bool) {
 	return ID, validateRounds(rounds)
 }
 
-func Day2_part1() int {
+func (AOC) Day2_part1() int {
 	lines := util.GetInput(2, false)
 
 	total := 0
@@ -148,7 +148,7 @@ func isValid_part2(line string) int {
 	return sum
 }
 
-func Day2_part2() int {
+func (AOC) Day2_part2() int {
 	lines := util.GetInput(2, false)
 
 	total := 0

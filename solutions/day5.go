@@ -149,7 +149,7 @@ func getResult(seeds []int, sets []set) int {
 	return int(solution)
 }
 
-func Day5_part1() int {
+func (AOC) Day5_part1() int {
 	lines := util.GetInput(5, false)
 
 	seeds := scanSeeds(lines[0])
@@ -158,7 +158,7 @@ func Day5_part1() int {
 	return getResult(seeds, sets)
 }
 
-func Day5_part2() int {
+func (AOC) Day5_part2() int {
 	lines := util.GetInput(5, false)
 
 	seeds := scanSeedsv2(lines[0])

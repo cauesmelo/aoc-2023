@@ -48,7 +48,7 @@ func extrapolate(seq []int) int {
 	return res
 }
 
-func Day9_part1() int {
+func (AOC) Day9_part1() int {
 	lines := util.GetInput(9, false)
 
 	seqs := getSequences(lines)
@@ -61,7 +61,7 @@ func Day9_part1() int {
 	return sum
 }
 
-func Day9_part2() int {
+func (AOC) Day9_part2() int {
 	lines := util.GetInput(9, false)
 
 	seqs := getSequences(lines)

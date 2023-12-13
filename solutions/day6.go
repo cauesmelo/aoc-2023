@@ -72,7 +72,7 @@ func getWaysToBeat(race race) int {
 	return ways
 }
 
-func Day6_part1() int {
+func (AOC) Day6_part1() int {
 	lines := util.GetInput(6, false)
 
 	races := getRaces(lines)
@@ -93,7 +93,7 @@ func Day6_part1() int {
 	return res
 }
 
-func Day6_part2() int {
+func (AOC) Day6_part2() int {
 	lines := util.GetInput(6, false)
 
 	race := getRace(lines)

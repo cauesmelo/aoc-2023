@@ -157,6 +157,85 @@ func getFarthests(s pos, lines []string) int {
 	return steps
 }
 
+func getPath(s pos, lines []string) []pos {
+	prev := s
+	curr := s
+	path := make([]pos, 0)
+
+	done := false
+	for !done {
+		n := getNextFrom(curr, prev, lines)
+		prev = curr
+		curr = n
+		path = append(path, n)
+
+		if lines[curr.y][curr.x] == 'S' {
+			done = true
+		}
+	}
+
+	return path
+}
+
+func isInside(line string, x int, y int, m map[pos]pos) bool {
+	cross := 0
+	corner := '0'
+
+	for i := x + 1; i < len(line); i++ {
+		_, isPath := m[pos{i, y}]
+
+		if !isPath {
+			continue
+		}
+
+		c := line[i]
+		if c == '|' {
+			cross++
+			continue
+		}
+
+		if c != '-' && c != 'S' {
+			if corner != '0' {
+				if corner == 'L' && c == '7' {
+					cross++
+				} else if corner == 'F' && c == 'J' {
+					cross++
+				}
+
+				corner = '0'
+			} else {
+				corner = rune(c)
+			}
+		}
+	}
+
+	return cross%2 == 1
+}
+
+func countInner(lines []string, path []pos) int {
+	count := 0
+	m := make(map[pos]pos)
+	for _, p := range path {
+		m[pos{x: p.x, y: p.y}] = p
+	}
+
+	for y, line := range lines {
+		for x := range line {
+			_, isPath := m[pos{x, y}]
+
+			if isPath {
+				continue
+			}
+
+			if isInside(line, x, y, m) {
+				count++
+			}
+		}
+	}
+
+	return count
+}
+
 func (AOC) Day10_part1() int {
 	lines := util.GetInput(10, false)
 	s := getStart(lines)
@@ -165,7 +244,9 @@ func (AOC) Day10_part1() int {
 }
 
 func (AOC) Day10_part2() int {
-	// lines := util.GetInput(8, false)
+	lines := util.GetInput(10, false)
+	s := getStart(lines)
+	path := getPath(s, lines)
 
-	return 0
+	return countInner(lines, path)
 }

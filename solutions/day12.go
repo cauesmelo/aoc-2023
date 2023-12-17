@@ -15,11 +15,9 @@ func getDmgCombinations(cfg string) []string {
 
 	combinations := make([]string, totalCombinations)
 
-	for i := range combinations {
-		combinations[i] = cfg
-	}
-
 	for cIdx := range combinations {
+		currStr := cfg
+
 		for sIdx := range slots {
 			strIdx := slots[sIdx][0]
 
@@ -27,11 +25,13 @@ func getDmgCombinations(cfg string) []string {
 			flipStr := ((cIdx / factor) % 2) == 0
 
 			if flipStr {
-				combinations[cIdx] = util.ReplaceAtIndex(combinations[cIdx], '.', strIdx)
+				currStr = util.ReplaceAtIndex(currStr, '.', strIdx)
 			} else {
-				combinations[cIdx] = util.ReplaceAtIndex(combinations[cIdx], '#', strIdx)
+				currStr = util.ReplaceAtIndex(currStr, '#', strIdx)
 			}
 		}
+
+		combinations[cIdx] = currStr
 	}
 
 	return combinations

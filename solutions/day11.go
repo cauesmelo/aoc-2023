@@ -53,7 +53,7 @@ func getExpandedSpace(lines []string) ([]int, []int) {
 	return rows, cols
 }
 
-func getWidthBetween(g_a, g_b int, cols []int) int {
+func getWidthBetween(g_a, g_b int, cols []int, mult int) int {
 	a := g_a
 	b := g_b
 
@@ -66,7 +66,7 @@ func getWidthBetween(g_a, g_b int, cols []int) int {
 
 	for i := a; i < b; i++ {
 		if slices.Contains(cols, i) {
-			w++
+			w += mult - 1
 		}
 
 		w++
@@ -75,7 +75,7 @@ func getWidthBetween(g_a, g_b int, cols []int) int {
 	return w
 }
 
-func getHeightBetween(g_a, g_b int, rows []int) int {
+func getHeightBetween(g_a, g_b int, rows []int, mult int) int {
 	a := g_a
 	b := g_b
 
@@ -88,7 +88,7 @@ func getHeightBetween(g_a, g_b int, rows []int) int {
 
 	for i := a; i < b; i++ {
 		if slices.Contains(rows, i) {
-			h++
+			h += mult - 1
 		}
 
 		h++
@@ -97,15 +97,15 @@ func getHeightBetween(g_a, g_b int, rows []int) int {
 	return h
 }
 
-func getSumSPGalaxies(galaxies []pos, rows []int, cols []int) int {
+func getSumSPGalaxies(galaxies []pos, rows []int, cols []int, mult int) int {
 	sum := 0
 
 	for gan, g_a := range galaxies {
 		gs := galaxies[gan+1:]
 
 		for _, g_b := range gs {
-			w := getWidthBetween(g_a.x, g_b.x, cols)
-			h := getHeightBetween(g_a.y, g_b.y, rows)
+			w := getWidthBetween(g_a.x, g_b.x, cols, mult)
+			h := getHeightBetween(g_a.y, g_b.y, rows, mult)
 
 			sum += w + h
 		}
@@ -116,14 +116,16 @@ func getSumSPGalaxies(galaxies []pos, rows []int, cols []int) int {
 
 func (AOC) Day11_part1() int {
 	lines := util.GetInput(11, false)
-
 	galaxies := getGalaxies(lines)
-
 	eRows, eCols := getExpandedSpace(lines)
 
-	return getSumSPGalaxies(galaxies, eRows, eCols)
+	return getSumSPGalaxies(galaxies, eRows, eCols, 2)
 }
 
 func (AOC) Day11_part2() int {
-	return 0
+	lines := util.GetInput(11, false)
+	galaxies := getGalaxies(lines)
+	eRows, eCols := getExpandedSpace(lines)
+
+	return getSumSPGalaxies(galaxies, eRows, eCols, 1000000)
 }

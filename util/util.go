@@ -8,6 +8,12 @@ import (
 	"strings"
 )
 
+func ReplaceAtIndex(in string, r rune, i int) string {
+	out := []rune(in)
+	out[i] = r
+	return string(out)
+}
+
 func GetNumbers(line string) []int {
 	re := regexp.MustCompile(`-?\d+`)
 

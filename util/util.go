@@ -1,12 +1,24 @@
 package util
 
 import (
+	"bytes"
+	"crypto/sha256"
 	"fmt"
 	"os"
 	"regexp"
 	"strconv"
 	"strings"
 )
+
+func GetHashForSliceInt(list []int) [32]byte {
+	var buffer bytes.Buffer
+
+	for i := range list {
+		buffer.WriteString(strconv.Itoa(list[i]))
+		buffer.WriteString("0")
+	}
+	return sha256.Sum256(buffer.Bytes())
+}
 
 func ReplaceAtIndex(in string, r rune, i int) string {
 	out := []rune(in)

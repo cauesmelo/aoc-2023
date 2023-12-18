@@ -4,6 +4,13 @@ import (
 	"github.com/cauesmelo/aoc-2023/util"
 )
 
+type mCoord struct {
+	xa int
+	xb int
+	ya int
+	yb int
+}
+
 type cord struct {
 	a int
 	b int
@@ -43,7 +50,7 @@ func compareRows(pattern []string, ya int, yb int) bool {
 	return true
 }
 
-func scanPatternVertical(pattern []string) *cord {
+func scanPatternVertical(pattern []string, ignore *mCoord) *cord {
 	height := len(pattern)
 
 	for yStart := 0; yStart < height; yStart++ {
@@ -70,7 +77,11 @@ func scanPatternVertical(pattern []string) *cord {
 		}
 
 		if isMirror {
-			return &cord{yStart + 1, yStart + 2}
+			if ignore != nil && ignore.ya == yStart+1 && ignore.yb == yStart+2 {
+				continue
+			} else {
+				return &cord{yStart + 1, yStart + 2}
+			}
 		}
 	}
 
@@ -92,7 +103,7 @@ func compareColumns(pattern []string, xa int, xb int) bool {
 	return true
 }
 
-func scanPatternHorizontal(pattern []string) *cord {
+func scanPatternHorizontal(pattern []string, ignore *mCoord) *cord {
 	width := len(pattern[0])
 
 	for xStart := 0; xStart < width; xStart++ {
@@ -119,29 +130,68 @@ func scanPatternHorizontal(pattern []string) *cord {
 		}
 
 		if isMirror {
-			return &cord{xStart + 1, xStart + 2}
+			if ignore != nil && ignore.xa == xStart+1 && ignore.xb == xStart+2 {
+				continue
+			} else {
+				return &cord{xStart + 1, xStart + 2}
+			}
 		}
 	}
 
 	return nil
 }
 
-func scanPattern(pattern []string) int {
-	cordH := scanPatternHorizontal(pattern)
+func scanPattern(pattern []string, ignore *mCoord) (int, *mCoord) {
+	cordH := scanPatternHorizontal(pattern, ignore)
 
 	if cordH != nil {
-		return cordH.a
+		return cordH.a, &mCoord{cordH.a, cordH.b, 0, 0}
 	}
 
-	cordV := scanPatternVertical(pattern)
+	cordV := scanPatternVertical(pattern, ignore)
 	if cordV != nil {
-		return 100 * cordV.a
+		return (100 * cordV.a), &mCoord{0, 0, cordV.a, cordV.b}
+	}
+
+	return 0, nil
+}
+
+func removeSmudge(pattern []string) int {
+	_, coordToIgnore := scanPattern(pattern, nil)
+
+	for y := 0; y < len(pattern); y++ {
+		for x := 0; x < len(pattern[0]); x++ {
+			if pattern[y][x] == '#' {
+				pattern[y] = pattern[y][:x] + "." + pattern[y][x+1:]
+				v, _ := scanPattern(pattern, coordToIgnore)
+
+				if v != 0 {
+					return v
+				} else {
+					pattern[y] = pattern[y][:x] + "#" + pattern[y][x+1:]
+				}
+			}
+		}
 	}
 
 	return 0
 }
 
 func (AOC) Day13_part1() int {
+	lines := util.GetInput(13, true)
+
+	patterns := groupPatterns(lines)
+	total := 0
+
+	for _, pattern := range patterns {
+		v, _ := scanPattern(pattern, nil)
+		total += v
+	}
+
+	return total
+}
+
+func (AOC) Day13_part2() int {
 	lines := util.GetInput(13, false)
 
 	patterns := groupPatterns(lines)
@@ -149,16 +199,8 @@ func (AOC) Day13_part1() int {
 	total := 0
 
 	for _, pattern := range patterns {
-		total += scanPattern(pattern)
+		total += removeSmudge(pattern)
 	}
 
 	return total
-}
-
-func (AOC) Day13_part2() int {
-	// lines := util.GetInput(13, true)
-
-	sum := 0
-
-	return sum
 }

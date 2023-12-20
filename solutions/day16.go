@@ -123,6 +123,26 @@ func calcEnergized(lines []string) int {
 	return len(m)
 }
 
+func blastFrom(lines []string, og pos, d dir) int {
+	runes := make([][]rune, len(lines))
+
+	for i, line := range lines {
+		runes[i] = []rune(line)
+	}
+
+	from := pos{og.x - d.x, og.y - d.y}
+
+	res := shootBeam(runes, from, d)
+
+	m := map[pos]bool{}
+
+	for _, p := range res {
+		m[p] = true
+	}
+
+	return len(m)
+}
+
 func (AOC) Day16_part1() int {
 	lines := util.GetInput(16, false)
 
@@ -130,7 +150,43 @@ func (AOC) Day16_part1() int {
 }
 
 func (AOC) Day16_part2() int {
-	// lines := util.GetInput(16, true)
+	lines := util.GetInput(16, false)
 
-	return 0
+	size := len(lines)
+
+	max := 0
+
+	for i := 0; i < size; i++ {
+		res := blastFrom(lines, pos{i, 0}, dir{0, 1})
+
+		if res > max {
+			max = res
+		}
+	}
+
+	for i := 0; i < size; i++ {
+		res := blastFrom(lines, pos{0, i}, dir{1, 0})
+
+		if res > max {
+			max = res
+		}
+	}
+
+	for i := 0; i < size; i++ {
+		res := blastFrom(lines, pos{i, size - 1}, dir{0, -1})
+
+		if res > max {
+			max = res
+		}
+	}
+
+	for i := 0; i < size; i++ {
+		res := blastFrom(lines, pos{0, i}, dir{-1, 0})
+
+		if res > max {
+			max = res
+		}
+	}
+
+	return max
 }
